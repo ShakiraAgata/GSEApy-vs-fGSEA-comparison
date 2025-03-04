@@ -1,0 +1,1528 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" /><title>Comparison of Preranked Gene Set Enrichment analysis(GSEA), traditional GSEA and fGSEA in Python and R &mdash; GSEApy-fGSEA comparison 2025 documentation</title>
+
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/nbsphinx-code-cells.css?v=2aa19091" />
+      <link rel="stylesheet" type="text/css" href="_static/custom.css?v=f923f512" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=cb975c41"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+      <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+      <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+      <script src="_static/custom.js?v=eb6c1ac1"></script>
+    <script src="_static/js/theme.js"></script><meta name="theme-color" content="#3d8fcc" />
+  
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Gene Set Enrichment Analyses comparison documentation" href="index.html" />
+<meta name="doc_version" content="" />
+<meta name="doc_is_latest" content="" />
+<meta name="doc_pagename" content="Agata,Shakira-PersonalProject-GSEApy vs fGSEA" />
+
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GSEApy-fGSEA comparison
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Comparison of Preranked Gene Set Enrichment analysis(GSEA), traditional GSEA and fGSEA in Python and R</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#Section-1:-Preranked-GSEA">Section 1: Preranked GSEA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Section-1.1:-System-preparation">Section 1.1: System preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Section-1.2:-Generation-of-the-RNK-file">Section 1.2: Generation of the RNK file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Section-1.3-Selection-of-the-geneset">Section 1.3 Selection of the geneset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Section-1.4:-Execution-of-preranked-GSEA">Section 1.4: Execution of preranked GSEA</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Section-2:-Traditional-GSEA">Section 2: Traditional GSEA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Section-2.1-Generation-of-expression-data-frame">Section 2.1 Generation of expression data frame</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Section-2.2-Generation-of-the-CLS-file">Section 2.2 Generation of the CLS file</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Section-2.3-Selection-of-the-geneset">Section 2.3 Selection of the geneset</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Section-2.4-Execution-of-traditional-GSEA">Section 2.4 Execution of traditional GSEA</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Section-3:-fGSEA">Section 3: fGSEA</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Section-3.1-Magic-R-extension-and-system-preparation">Section 3.1 Magic R extension and system preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Section-3.2-Execution-of-fGSEA">Section 3.2 Execution of fGSEA</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#Section-4.-Session-information-for-Python-and-R">Section 4. Session information for Python and R</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#Section-4.1:-Python-session-information">Section 4.1: Python session information</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#Section-4.2:-R-session-information">Section 4.2: R session information</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GSEApy-fGSEA comparison</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Comparison of Preranked Gene Set Enrichment analysis(GSEA), traditional GSEA and fGSEA in Python and R</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Agata,Shakira-PersonalProject-GSEApy vs fGSEA.ipynb.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+<div itemprop="articleBody">
+  
+
+  
+  <section id="Comparison-of-Preranked-Gene-Set-Enrichment-analysis(GSEA),-traditional-GSEA-and-fGSEA-in-Python-and-R">
+<h1>Comparison of Preranked Gene Set Enrichment analysis(GSEA), traditional GSEA and fGSEA in Python and R<a class="headerlink" href="#Comparison-of-Preranked-Gene-Set-Enrichment-analysis(GSEA),-traditional-GSEA-and-fGSEA-in-Python-and-R" title="Link to this heading"></a></h1>
+<p>Author: Shakira Agata</p>
+<p>This Jupyter notebook describes the steps for the execution and comparison of methods: preranked GSEA, traditional GSEA and fGSEA (Fast Gene Set Enrichment Analysis). My goal was to identify the potential difference in outcomes when using three different methods of GSEA: preranked GSEA from GSEApy, traditional GSEA from GSEApy and fGSEA from Bioconductor(1,2). I did this by comparing the outcomes in identified pathways, calculated Enrichment Scores (ES) and Normalized Enrichment Scores for the
+three methods. The comparison was made using the data for Ag+ and control at 24 hours from ArrayExpress dataset: E-MEXP-3583. This dataset looked at the effect of Ag+ and AgNPs on the gene expression in a human lung epithelial cell line A549.</p>
+<p>This notebook is subdivided into the following two sections:</p>
+<ul class="simple">
+<li><p>Section 1: Preranked GSEA</p>
+<ul>
+<li><p>Section 1.1: System preparation</p></li>
+<li><p>Section 1.2: Generation of the RNK file</p></li>
+<li><p>Section 1.3: Selection of the geneset</p></li>
+<li><p>Section 1.4: Execution of GSEA</p></li>
+</ul>
+</li>
+<li><p>Section 2: Traditional GSEA</p>
+<ul>
+<li><p>Section 2.1: Generation of expression data frame</p></li>
+<li><p>Section 2.2: Generation of the CLS file</p></li>
+<li><p>Section 2.3: Selection of the geneset</p></li>
+<li><p>Section 2.4: Execution of GSEA</p></li>
+</ul>
+</li>
+<li><p>Section 3: fGSEA</p>
+<ul>
+<li><p>Section 3.1 Magic R extension and system preparation</p></li>
+<li><p>Section 3.2 Execution of fGSEA</p></li>
+</ul>
+</li>
+<li><p>Section 4: Session information for Python and R</p>
+<ul>
+<li><p>Section 4.1: Python session information</p></li>
+<li><p>Section 4.2: R session information</p></li>
+</ul>
+</li>
+</ul>
+<section id="Section-1:-Preranked-GSEA">
+<h2>Section 1: Preranked GSEA<a class="headerlink" href="#Section-1:-Preranked-GSEA" title="Link to this heading"></a></h2>
+<p>In this section, the preranked GSEA method will be used which allows users to select the ranking method for the comparison of two group of samples (e.g control and treatment). In this case, the differential gene expression results for the comparison of Ag+ to the control at 24h was used to allow for the calculation of the ranking by the log2FC. This ranking method is used in the formal documentation of GSEA and can be used as option in fGSEA and Clusterprofiler GSEA in Rstudio (1).</p>
+<section id="Section-1.1:-System-preparation">
+<h3>Section 1.1: System preparation<a class="headerlink" href="#Section-1.1:-System-preparation" title="Link to this heading"></a></h3>
+<p><strong>Step 1.</strong> The necessary packages for using this pipeline are first installed.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">gseapy.plot</span> <span class="kn">import</span> <span class="n">gseaplot</span>
+<span class="kn">import</span> <span class="nn">gseapy</span> <span class="k">as</span> <span class="nn">gp</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">gseapy</span> <span class="kn">import</span> <span class="n">dotplot</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">watermark</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Requirement already satisfied: watermark in c:\users\shaki\anaconda3\lib\site-packages (2.4.3)
+Requirement already satisfied: ipython&gt;=6.0 in c:\users\shaki\anaconda3\lib\site-packages (from watermark) (8.25.0)
+Requirement already satisfied: importlib-metadata&gt;=1.4 in c:\users\shaki\anaconda3\lib\site-packages (from watermark) (7.0.1)
+Requirement already satisfied: setuptools in c:\users\shaki\anaconda3\lib\site-packages (from watermark) (69.5.1)
+Requirement already satisfied: zipp&gt;=0.5 in c:\users\shaki\anaconda3\lib\site-packages (from importlib-metadata&gt;=1.4-&gt;watermark) (3.17.0)
+Requirement already satisfied: decorator in c:\users\shaki\anaconda3\lib\site-packages (from ipython&gt;=6.0-&gt;watermark) (5.1.1)
+Requirement already satisfied: jedi&gt;=0.16 in c:\users\shaki\anaconda3\lib\site-packages (from ipython&gt;=6.0-&gt;watermark) (0.18.1)
+Requirement already satisfied: matplotlib-inline in c:\users\shaki\anaconda3\lib\site-packages (from ipython&gt;=6.0-&gt;watermark) (0.1.6)
+Requirement already satisfied: prompt-toolkit&lt;3.1.0,&gt;=3.0.41 in c:\users\shaki\anaconda3\lib\site-packages (from ipython&gt;=6.0-&gt;watermark) (3.0.43)
+Requirement already satisfied: pygments&gt;=2.4.0 in c:\users\shaki\anaconda3\lib\site-packages (from ipython&gt;=6.0-&gt;watermark) (2.15.1)
+Requirement already satisfied: stack-data in c:\users\shaki\anaconda3\lib\site-packages (from ipython&gt;=6.0-&gt;watermark) (0.2.0)
+Requirement already satisfied: traitlets&gt;=5.13.0 in c:\users\shaki\anaconda3\lib\site-packages (from ipython&gt;=6.0-&gt;watermark) (5.14.3)
+Requirement already satisfied: colorama in c:\users\shaki\anaconda3\lib\site-packages (from ipython&gt;=6.0-&gt;watermark) (0.4.6)
+Requirement already satisfied: parso&lt;0.9.0,&gt;=0.8.0 in c:\users\shaki\anaconda3\lib\site-packages (from jedi&gt;=0.16-&gt;ipython&gt;=6.0-&gt;watermark) (0.8.3)
+Requirement already satisfied: wcwidth in c:\users\shaki\anaconda3\lib\site-packages (from prompt-toolkit&lt;3.1.0,&gt;=3.0.41-&gt;ipython&gt;=6.0-&gt;watermark) (0.2.5)
+Requirement already satisfied: executing in c:\users\shaki\anaconda3\lib\site-packages (from stack-data-&gt;ipython&gt;=6.0-&gt;watermark) (0.8.3)
+Requirement already satisfied: asttokens in c:\users\shaki\anaconda3\lib\site-packages (from stack-data-&gt;ipython&gt;=6.0-&gt;watermark) (2.0.5)
+Requirement already satisfied: pure-eval in c:\users\shaki\anaconda3\lib\site-packages (from stack-data-&gt;ipython&gt;=6.0-&gt;watermark) (0.2.2)
+Requirement already satisfied: six in c:\users\shaki\anaconda3\lib\site-packages (from asttokens-&gt;stack-data-&gt;ipython&gt;=6.0-&gt;watermark) (1.16.0)
+Note: you may need to restart the kernel to use updated packages.
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+
+[notice] A new release of pip is available: 24.3.1 -&gt; 25.0.1
+[notice] To update, run: python.exe -m pip install --upgrade pip
+</pre></div></div>
+</div>
+</section>
+<section id="Section-1.2:-Generation-of-the-RNK-file">
+<h3>Section 1.2: Generation of the RNK file<a class="headerlink" href="#Section-1.2:-Generation-of-the-RNK-file" title="Link to this heading"></a></h3>
+<p><strong>Step 2.</strong> Next, you load the data from E-MEXP3583 into a dataframe.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;topTable_Ag._.1.3_24 - H2O.control_.0.0_24-try.csv&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+<span class="n">df1</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GeneID</th>
+      <th>meanExpr</th>
+      <th>log2FC</th>
+      <th>log2FC SE</th>
+      <th>p-value</th>
+      <th>adjpvalue</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4490</td>
+      <td>9.925881</td>
+      <td>3.935193</td>
+      <td>0.206737</td>
+      <td>9.842270e-11</td>
+      <td>0.000002</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4495</td>
+      <td>9.561522</td>
+      <td>4.109887</td>
+      <td>0.243653</td>
+      <td>3.924060e-10</td>
+      <td>0.000004</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>79974</td>
+      <td>6.381454</td>
+      <td>2.532636</td>
+      <td>0.174021</td>
+      <td>2.094514e-09</td>
+      <td>0.000011</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4489</td>
+      <td>12.843381</td>
+      <td>2.498127</td>
+      <td>0.172052</td>
+      <td>2.150589e-09</td>
+      <td>0.000011</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1638</td>
+      <td>6.429810</td>
+      <td>2.349836</td>
+      <td>0.170834</td>
+      <td>3.954792e-09</td>
+      <td>0.000016</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>20513</th>
+      <td>391257</td>
+      <td>6.462645</td>
+      <td>-0.000055</td>
+      <td>0.146291</td>
+      <td>9.996750e-01</td>
+      <td>0.999870</td>
+    </tr>
+    <tr>
+      <th>20514</th>
+      <td>10078</td>
+      <td>8.351476</td>
+      <td>-0.000037</td>
+      <td>0.128166</td>
+      <td>9.997478e-01</td>
+      <td>0.999894</td>
+    </tr>
+    <tr>
+      <th>20515</th>
+      <td>84328</td>
+      <td>9.130185</td>
+      <td>-0.000033</td>
+      <td>0.167015</td>
+      <td>9.998260e-01</td>
+      <td>0.999923</td>
+    </tr>
+    <tr>
+      <th>20516</th>
+      <td>253018</td>
+      <td>7.162925</td>
+      <td>-0.000015</td>
+      <td>0.199487</td>
+      <td>9.999336e-01</td>
+      <td>0.999982</td>
+    </tr>
+    <tr>
+      <th>20517</th>
+      <td>440737</td>
+      <td>10.365751</td>
+      <td>0.000003</td>
+      <td>0.187502</td>
+      <td>9.999848e-01</td>
+      <td>0.999985</td>
+    </tr>
+  </tbody>
+</table>
+<p>20518 rows × 6 columns</p>
+</div></div>
+</div>
+<p><strong>Step 3.</strong> The dataframe is reformatted so that the geneID and log2FC columns are kept. In this case, the log2FC used as the rank and thus the name of the column:log2FC is changed to ‘Rank’.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df2</span><span class="o">=</span> <span class="n">df1</span><span class="p">[[</span><span class="s1">&#39;GeneID&#39;</span><span class="p">,</span><span class="s1">&#39;log2FC&#39;</span><span class="p">]]</span>
+<span class="n">df3</span><span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;log2FC&#39;</span><span class="p">:</span><span class="s1">&#39;Rank&#39;</span><span class="p">})</span>
+<span class="n">df3</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GeneID</th>
+      <th>Rank</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>4490</td>
+      <td>3.935193</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>4495</td>
+      <td>4.109887</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>79974</td>
+      <td>2.532636</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4489</td>
+      <td>2.498127</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1638</td>
+      <td>2.349836</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>20513</th>
+      <td>391257</td>
+      <td>-0.000055</td>
+    </tr>
+    <tr>
+      <th>20514</th>
+      <td>10078</td>
+      <td>-0.000037</td>
+    </tr>
+    <tr>
+      <th>20515</th>
+      <td>84328</td>
+      <td>-0.000033</td>
+    </tr>
+    <tr>
+      <th>20516</th>
+      <td>253018</td>
+      <td>-0.000015</td>
+    </tr>
+    <tr>
+      <th>20517</th>
+      <td>440737</td>
+      <td>0.000003</td>
+    </tr>
+  </tbody>
+</table>
+<p>20518 rows × 2 columns</p>
+</div></div>
+</div>
+<p><strong>Step 4.</strong> The datatype of the first column of df3 is changed to a string as needed for the GSEA function we will use in section 1.4. The ‘Rank’ column will remain unnchanged as rank needs to remain numeric for the GSEA function. We also remove duplicates as duplicates will raise errors when running GSEA.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[14]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df3</span><span class="p">[</span><span class="s1">&#39;GeneID&#39;</span><span class="p">]</span><span class="o">=</span><span class="n">df3</span><span class="p">[</span><span class="s1">&#39;GeneID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+<span class="n">ranking</span><span class="o">=</span><span class="n">df3</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="s2">&quot;GeneID&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;first&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Section-1.3-Selection-of-the-geneset">
+<h3>Section 1.3 Selection of the geneset<a class="headerlink" href="#Section-1.3-Selection-of-the-geneset" title="Link to this heading"></a></h3>
+<p><strong>Step 5.</strong> Here, you can select the geneset of interest. The command below displays the available options. In this notebook, the ENTREZ ID version of WikiPathways 2024 Human will be used.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[17]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">names</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">get_library_name</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Section-1.4:-Execution-of-preranked-GSEA">
+<h3>Section 1.4: Execution of preranked GSEA<a class="headerlink" href="#Section-1.4:-Execution-of-preranked-GSEA" title="Link to this heading"></a></h3>
+<p><strong>Step 6.</strong> Preranked GSEA can be executed by selection of the RNK file and gene set. The seed, min_size, max_size and permutation number were set to those below in accordance with the formal documentation of GSEAPY. The permutation type was set to ‘gene_set’ as we have less than 15 samples and verbose was set to TRUE to get more insight into the GSEA process(1).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[20]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Preranked_GSEA</span><span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">prerank</span><span class="p">(</span><span class="n">rnk</span><span class="o">=</span><span class="n">ranking</span><span class="p">,</span>
+                     <span class="n">gene_sets</span><span class="o">=</span><span class="s1">&#39;c2.cp.wikipathways.v2024.1.Hs.entrez.gmt&#39;</span><span class="p">,</span>
+                     <span class="n">min_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                     <span class="n">max_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                     <span class="n">permutation_type</span><span class="o">=</span><span class="s1">&#39;gene_set&#39;</span><span class="p">,</span>
+                     <span class="n">seed</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+                     <span class="n">permutation_num</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                     <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+2025-03-04 11:19:47,130 [INFO] Parsing data files for GSEA.............................
+2025-03-04 11:19:47,195 [INFO] 0000 gene_sets have been filtered out when max_size=1000 and min_size=5
+2025-03-04 11:19:47,195 [INFO] 0830 gene_sets used for further statistical testing.....
+2025-03-04 11:19:47,199 [INFO] Start to run GSEA...Might take a while..................
+2025-03-04 11:20:38,521 [INFO] Congratulations. GSEApy runs successfully................
+
+</pre></div></div>
+</div>
+<p><strong>Step 7.</strong> In the next step, the results are displayed and visualized.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">Preranked_GSEA</span><span class="o">.</span><span class="n">res2d</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[22]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Name</th>
+      <th>Term</th>
+      <th>ES</th>
+      <th>NES</th>
+      <th>NOM p-val</th>
+      <th>FDR q-val</th>
+      <th>FWER p-val</th>
+      <th>Tag %</th>
+      <th>Gene %</th>
+      <th>Lead_genes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>prerank</td>
+      <td>WP_COPPER_HOMEOSTASIS</td>
+      <td>0.758562</td>
+      <td>2.676049</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>12/53</td>
+      <td>2.46%</td>
+      <td>4495;4490;4501;4489;4494;4496;4493;84560;4500;...</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>prerank</td>
+      <td>WP_ZINC_HOMEOSTASIS</td>
+      <td>0.816562</td>
+      <td>2.670822</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>15/37</td>
+      <td>5.27%</td>
+      <td>4495;4490;4501;4489;4494;7780;4496;7779;4493;8...</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>prerank</td>
+      <td>WP_GENES_RELATED_TO_PRIMARY_CILIUM_DEVELOPMENT...</td>
+      <td>-0.546802</td>
+      <td>-2.576323</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>60/101</td>
+      <td>27.17%</td>
+      <td>55764;8100;132320;23322;57539;23059;79659;5508...</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>prerank</td>
+      <td>WP_BARDETBIEDL_SYNDROME</td>
+      <td>-0.540727</td>
+      <td>-2.417239</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>42/86</td>
+      <td>20.25%</td>
+      <td>55764;132320;2736;5311;5727;57539;23059;79659;...</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>prerank</td>
+      <td>WP_CILIOPATHIES</td>
+      <td>-0.470576</td>
+      <td>-2.415103</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>78/181</td>
+      <td>20.38%</td>
+      <td>1063;55764;132320;4751;2736;5311;4867;219844;2...</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[23]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax1</span> <span class="o">=</span> <span class="n">dotplot</span><span class="p">(</span><span class="n">Preranked_GSEA</span><span class="o">.</span><span class="n">res2d</span><span class="p">,</span>
+             <span class="n">column</span><span class="o">=</span><span class="s2">&quot;FDR q-val&quot;</span><span class="p">,</span>
+             <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Preranked GSEA&#39;</span><span class="p">,</span>
+             <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">,</span>
+             <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="c1"># adjust dot size</span>
+             <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">show_ring</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\shaki\anaconda3\Lib\site-packages\gseapy\plot.py:738: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option(&#39;future.no_silent_downcasting&#39;, True)`
+  df[self.colname] = df[self.colname].replace(0, np.nan).bfill()
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Agata%2CShakira-PersonalProject-GSEApy_vs_fGSEA_22_1.png" src="_images/Agata%2CShakira-PersonalProject-GSEApy_vs_fGSEA_22_1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Section-2:-Traditional-GSEA">
+<h2>Section 2: Traditional GSEA<a class="headerlink" href="#Section-2:-Traditional-GSEA" title="Link to this heading"></a></h2>
+<p>In this section, traditional GSEA will be executed. This method allows for 5 ranking methods including: signal_to_noise, t_test, ratio_of_classes, diff_of_classes and log2_ratio_of_classes. In order to use this method, the following two files have to be prepared beforehand.</p>
+<section id="Section-2.1-Generation-of-expression-data-frame">
+<h3>Section 2.1 Generation of expression data frame<a class="headerlink" href="#Section-2.1-Generation-of-expression-data-frame" title="Link to this heading"></a></h3>
+<p><strong>Step 8.</strong> Gene expression data dataframe will be generated in this step. The gene expression data file is a expression value table in which the sample names are placed horizontal and the gene names are placed vertical. This data was loaded and manipulated to meet GSEA guidelines.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[28]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;TraditionalGSEA-EMEXP3583.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;TraditionalGSEA-EMEXP3583-version2.txt&#39;</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">&quot;TraditionalGSEA-EMEXP3583-version2.txt&quot;</span><span class="p">,</span><span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="p">[</span><span class="s1">&#39;M225-05&#39;</span><span class="p">,</span> <span class="s1">&#39;M225-01L&#39;</span><span class="p">,</span> <span class="s1">&#39;M225-03&#39;</span><span class="p">,</span><span class="s1">&#39;M225-07&#39;</span><span class="p">]]</span>
+<span class="n">TraditionalGSEA</span><span class="o">=</span> <span class="n">df2</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;M225-05&quot;</span><span class="p">:</span> <span class="s2">&quot;Control&quot;</span><span class="p">,</span> <span class="s2">&quot;M225-01L&quot;</span><span class="p">:</span> <span class="s2">&quot;Control&quot;</span><span class="p">,</span><span class="s2">&quot;M225-03&quot;</span><span class="p">:</span> <span class="s2">&quot;Treatment&quot;</span><span class="p">,</span><span class="s2">&quot;M225-07&quot;</span><span class="p">:</span> <span class="s2">&quot;Treatment&quot;</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TraditionalGSEA</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[29]:
+</pre></div>
+</div>
+<div class="output_area rendered_html docutils container">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Control</th>
+      <th>Control</th>
+      <th>Treatment</th>
+      <th>Treatment</th>
+    </tr>
+    <tr>
+      <th>EntrezID</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>7.941181</td>
+      <td>8.006905</td>
+      <td>7.990053</td>
+      <td>8.326014</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>4.473060</td>
+      <td>4.561733</td>
+      <td>4.546220</td>
+      <td>4.573649</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>10.246258</td>
+      <td>10.481636</td>
+      <td>10.297045</td>
+      <td>10.176861</td>
+    </tr>
+    <tr>
+      <th>1000</th>
+      <td>11.149919</td>
+      <td>11.145671</td>
+      <td>11.090569</td>
+      <td>11.116654</td>
+    </tr>
+    <tr>
+      <th>10000</th>
+      <td>10.274072</td>
+      <td>10.243285</td>
+      <td>10.226056</td>
+      <td>10.054899</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>9991</th>
+      <td>10.900741</td>
+      <td>10.551433</td>
+      <td>10.444575</td>
+      <td>10.473755</td>
+    </tr>
+    <tr>
+      <th>9992</th>
+      <td>5.068302</td>
+      <td>5.348781</td>
+      <td>5.664488</td>
+      <td>5.512333</td>
+    </tr>
+    <tr>
+      <th>9993</th>
+      <td>9.888579</td>
+      <td>10.014469</td>
+      <td>9.710480</td>
+      <td>9.798821</td>
+    </tr>
+    <tr>
+      <th>9994</th>
+      <td>7.720305</td>
+      <td>7.575626</td>
+      <td>7.660303</td>
+      <td>7.523620</td>
+    </tr>
+    <tr>
+      <th>9997</th>
+      <td>8.247325</td>
+      <td>8.484476</td>
+      <td>8.669681</td>
+      <td>8.838813</td>
+    </tr>
+  </tbody>
+</table>
+<p>20518 rows × 4 columns</p>
+</div></div>
+</div>
+</section>
+<section id="Section-2.2-Generation-of-the-CLS-file">
+<h3>Section 2.2 Generation of the CLS file<a class="headerlink" href="#Section-2.2-Generation-of-the-CLS-file" title="Link to this heading"></a></h3>
+<p><strong>Step 9.</strong> The CLS file was created according to the GSEA guidelines. Based on the expression data, the following structure of the cls file was created and saved with a cls extension:</p>
+<p>CLS file structure:</p>
+<ul class="simple">
+<li><p>First line : 4 2 1</p></li>
+<li><p>Second line: # Control Treatment</p></li>
+<li><p>Third line: ‘Control’ ‘Control’ ‘Treatment’ ‘Treatment’</p></li>
+</ul>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[32]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;clsfile.cls&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;4 2 1</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;# Control Treatment </span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;&#39;Control&#39; &#39;Control&#39; &#39;Treatment&#39; &#39;Treatment&#39;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Section-2.3-Selection-of-the-geneset">
+<h3>Section 2.3 Selection of the geneset<a class="headerlink" href="#Section-2.3-Selection-of-the-geneset" title="Link to this heading"></a></h3>
+<p>In this section, the geneset of interest can be selected. In this notebook, the ENTREZ ID version of WikiPathways 2024 Human will be used.</p>
+</section>
+<section id="Section-2.4-Execution-of-traditional-GSEA">
+<h3>Section 2.4 Execution of traditional GSEA<a class="headerlink" href="#Section-2.4-Execution-of-traditional-GSEA" title="Link to this heading"></a></h3>
+<p><strong>Step 10.</strong> Lastly traditional GSEA was executed. This requires setting the EntrezID as the index and maintenance of the same parameters as for preranked GSEA.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[37]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TraditionalGSEA</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="s1">&#39;EntrezID&#39;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[38]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TraditionalGSEA</span><span class="p">[</span><span class="s1">&#39;EntrezID&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">TraditionalGSEA</span><span class="p">[</span><span class="s1">&#39;EntrezID&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[39]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">GSEA</span> <span class="o">=</span> <span class="n">gp</span><span class="o">.</span><span class="n">gsea</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">TraditionalGSEA</span><span class="p">,</span>
+                 <span class="n">gene_sets</span><span class="o">=</span><span class="s1">&#39;c2.cp.wikipathways.v2024.1.Hs.entrez.gmt&#39;</span><span class="p">,</span>
+                 <span class="bp">cls</span><span class="o">=</span> <span class="s2">&quot;clsfile.cls&quot;</span><span class="p">,</span>
+                 <span class="n">min_size</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                 <span class="n">max_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                 <span class="n">permutation_num</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+                 <span class="n">permutation_type</span><span class="o">=</span><span class="s1">&#39;gene_set&#39;</span><span class="p">,</span>
+                 <span class="n">outdir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">method</span><span class="o">=</span><span class="s1">&#39;log2_ratio_of_classes&#39;</span><span class="p">,</span>
+                 <span class="n">threads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                 <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                 <span class="n">seed</span><span class="o">=</span> <span class="mi">6</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+2025-03-04 11:20:41,812 [INFO] Parsing data files for GSEA.............................
+2025-03-04 11:20:41,887 [INFO] 0000 gene_sets have been filtered out when max_size=1000 and min_size=5
+2025-03-04 11:20:41,887 [INFO] 0830 gene_sets used for further statistical testing.....
+2025-03-04 11:20:41,887 [INFO] Start to run GSEA...Might take a while..................
+2025-03-04 11:21:42,060 [INFO] Congratulations. GSEApy ran successfully.................
+
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[40]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">GSEA</span><span class="o">.</span><span class="n">res2d</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+   Name                                               Term        ES  \
+0  gsea  WP_GENES_RELATED_TO_PRIMARY_CILIUM_DEVELOPMENT...  0.557377
+1  gsea                                WP_ZINC_HOMEOSTASIS -0.775016
+2  gsea                            WP_BARDETBIEDL_SYNDROME   0.50323
+3  gsea                              WP_COPPER_HOMEOSTASIS -0.696479
+4  gsea  WP_REGULATION_OF_SISTER_CHROMATID_SEPARATION_A...  0.720957
+
+        NES NOM p-val FDR q-val FWER p-val   Tag %  Gene %  \
+0  2.580045       0.0       0.0        0.0  50/101  21.25%
+1 -2.319458       0.0       0.0        0.0   13/37   4.76%
+2  2.290378       0.0  0.002076      0.002   40/86  19.31%
+3  -2.19289       0.0       0.0        0.0   12/53   7.55%
+4  2.130938       0.0  0.020764      0.029    4/14   4.81%
+
+                                          Lead_genes
+0  8100;55764;132320;23322;79659;57539;23059;1328...
+1  4495;4490;4501;4489;7780;4496;4494;4493;84560;...
+2  55764;132320;79659;2736;57539;5311;23059;13288...
+3  4495;4490;4501;4489;4496;4494;4493;84560;4500;...
+4                                 1062;9232;9700;699
+</pre></div></div>
+</div>
+<p><strong>Step 11.</strong> In the next step, the results are displayed and visualized.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[42]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ax2</span> <span class="o">=</span> <span class="n">dotplot</span><span class="p">(</span><span class="n">GSEA</span><span class="o">.</span><span class="n">res2d</span><span class="p">,</span>
+             <span class="n">column</span><span class="o">=</span><span class="s2">&quot;FDR q-val&quot;</span><span class="p">,</span>
+             <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Traditional GSEA&#39;</span><span class="p">,</span>
+             <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">viridis</span><span class="p">,</span>
+             <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="c1"># adjust dot size</span>
+             <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">),</span> <span class="n">cutoff</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">show_ring</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\shaki\anaconda3\Lib\site-packages\gseapy\plot.py:738: FutureWarning: Downcasting behavior in `replace` is deprecated and will be removed in a future version. To retain the old behavior, explicitly call `result.infer_objects(copy=False)`. To opt-in to the future behavior, set `pd.set_option(&#39;future.no_silent_downcasting&#39;, True)`
+  df[self.colname] = df[self.colname].replace(0, np.nan).bfill()
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Agata%2CShakira-PersonalProject-GSEApy_vs_fGSEA_41_1.png" src="_images/Agata%2CShakira-PersonalProject-GSEApy_vs_fGSEA_41_1.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="Section-3:-fGSEA">
+<h2>Section 3: fGSEA<a class="headerlink" href="#Section-3:-fGSEA" title="Link to this heading"></a></h2>
+<p>In this section, fast GSEA (fGSEA) will be executed which is a package developed by BioConductor. To be able to use this package in this notebook, rpy2 was employed.</p>
+<section id="Section-3.1-Magic-R-extension-and-system-preparation">
+<h3>Section 3.1 Magic R extension and system preparation<a class="headerlink" href="#Section-3.1-Magic-R-extension-and-system-preparation" title="Link to this heading"></a></h3>
+<p><strong>Step 12.</strong> We first activate rpy2 in this notebook. If a Windows laptop is used, the the warning ‘quartz’ may appear which can be ignored.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[47]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> rpy2.ipython
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+C:\Users\shaki\anaconda3\Lib\site-packages\rpy2\robjects\packages.py:367: UserWarning: The symbol &#39;quartz&#39; is not in this R namespace/package.
+  warnings.warn(
+</pre></div></div>
+</div>
+<p><strong>Step 13</strong>. Next, the needed packages for fGSEA are installed. Dpending on the user’s background and possible prior experience with R, notifications for updating packages may appear. These notifications can be answered at users discretion.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[49]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+<span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">require</span><span class="p">(</span><span class="s">&quot;BiocManager&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">quietly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">))</span>
+<span class="w">    </span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;BiocManager&quot;</span><span class="p">)</span>
+
+<span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&quot;clusterProfiler&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+R[write to console]: Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.1 (2024-06-14 ucrt)
+
+R[write to console]: Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.1 (2024-06-14 ucrt)
+
+R[write to console]: Installation paths not writeable, unable to update packages
+  path: C:/Program Files/R/R-4.4.1/library
+  packages:
+    class, cluster, foreign, KernSmooth, Matrix, nlme, nnet, rpart, spatial,
+    survival
+
+R[write to console]: Old packages: &#39;aplot&#39;, &#39;Biostrings&#39;, &#39;cli&#39;, &#39;cpp11&#39;, &#39;ggnewscale&#39;, &#39;igraph&#39;,
+  &#39;IRanges&#39;, &#39;jsonlite&#39;, &#39;MASS&#39;, &#39;processx&#39;, &#39;R.utils&#39;, &#39;readxl&#39;, &#39;recolorize&#39;,
+  &#39;rlang&#39;, &#39;S4Vectors&#39;, &#39;terra&#39;, &#39;tinytex&#39;, &#39;xml2&#39;, &#39;XVector&#39;, &#39;zlibbioc&#39;
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Update all/some/none? [a/s/n]:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ n
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[50]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+<span class="nf">if </span><span class="p">(</span><span class="o">!</span><span class="nf">require</span><span class="p">(</span><span class="s">&quot;BiocManager&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">quietly</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">TRUE</span><span class="p">))</span>
+<span class="w">    </span><span class="nf">install.packages</span><span class="p">(</span><span class="s">&quot;BiocManager&quot;</span><span class="p">)</span>
+
+<span class="n">BiocManager</span><span class="o">::</span><span class="nf">install</span><span class="p">(</span><span class="s">&quot;fgsea&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+R[write to console]: Bioconductor version 3.20 (BiocManager 1.30.25), R 4.4.1 (2024-06-14 ucrt)
+
+R[write to console]: Installation paths not writeable, unable to update packages
+  path: C:/Program Files/R/R-4.4.1/library
+  packages:
+    class, cluster, foreign, KernSmooth, Matrix, nlme, nnet, rpart, spatial,
+    survival
+
+R[write to console]: Old packages: &#39;aplot&#39;, &#39;Biostrings&#39;, &#39;cli&#39;, &#39;cpp11&#39;, &#39;ggnewscale&#39;, &#39;igraph&#39;,
+  &#39;IRanges&#39;, &#39;jsonlite&#39;, &#39;MASS&#39;, &#39;processx&#39;, &#39;R.utils&#39;, &#39;readxl&#39;, &#39;recolorize&#39;,
+  &#39;rlang&#39;, &#39;S4Vectors&#39;, &#39;terra&#39;, &#39;tinytex&#39;, &#39;xml2&#39;, &#39;XVector&#39;, &#39;zlibbioc&#39;
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Update all/some/none? [a/s/n]:
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+ n
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[51]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+<span class="nf">install.packages</span><span class="p">(</span><span class="nf">c </span><span class="p">(</span><span class="s">&quot;readr&quot;</span><span class="p">,</span><span class="s">&quot;ggplot2&quot;</span><span class="p">,</span><span class="s">&quot;data.table&quot;</span><span class="p">,</span><span class="s">&quot;dplyr&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+R[write to console]: Installing packages into &#39;C:/Users/shaki/AppData/Local/R/win-library/4.4&#39;
+(as &#39;lib&#39; is unspecified)
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+--- Please select a CRAN mirror for use in this session ---
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+R[write to console]: trying URL &#39;https://mirror.lyrahosting.com/CRAN/bin/windows/contrib/4.4/readr_2.1.5.zip&#39;
+
+R[write to console]: Content type &#39;application/zip&#39;
+R[write to console]:  length 1223048 bytes (1.2 MB)
+
+R[write to console]: downloaded 1.2 MB
+
+
+R[write to console]: trying URL &#39;https://mirror.lyrahosting.com/CRAN/bin/windows/contrib/4.4/ggplot2_3.5.1.zip&#39;
+
+R[write to console]: Content type &#39;application/zip&#39;
+R[write to console]:  length 5021782 bytes (4.8 MB)
+
+R[write to console]: downloaded 4.8 MB
+
+
+R[write to console]: trying URL &#39;https://mirror.lyrahosting.com/CRAN/bin/windows/contrib/4.4/data.table_1.17.0.zip&#39;
+
+R[write to console]: Content type &#39;application/zip&#39;
+R[write to console]:  length 2910072 bytes (2.8 MB)
+
+R[write to console]: downloaded 2.8 MB
+
+
+R[write to console]: trying URL &#39;https://mirror.lyrahosting.com/CRAN/bin/windows/contrib/4.4/dplyr_1.1.4.zip&#39;
+
+R[write to console]: Content type &#39;application/zip&#39;
+R[write to console]:  length 1590307 bytes (1.5 MB)
+
+R[write to console]: downloaded 1.5 MB
+
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+package &#39;readr&#39; successfully unpacked and MD5 sums checked
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+R[write to console]: Warning:
+R[write to console]:  cannot remove prior installation of package &#39;readr&#39;
+
+R[write to console]: Warning:
+R[write to console]:  restored &#39;readr&#39;
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+package &#39;ggplot2&#39; successfully unpacked and MD5 sums checked
+package &#39;data.table&#39; successfully unpacked and MD5 sums checked
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+R[write to console]: Warning:
+R[write to console]:  cannot remove prior installation of package &#39;data.table&#39;
+
+R[write to console]: Warning:
+R[write to console]:  restored &#39;data.table&#39;
+
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+package &#39;dplyr&#39; successfully unpacked and MD5 sums checked
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+R[write to console]: Warning:
+R[write to console]:  cannot remove prior installation of package &#39;dplyr&#39;
+
+R[write to console]: Warning:
+R[write to console]:  restored &#39;dplyr&#39;
+
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+
+The downloaded binary packages are in
+        C:\Users\shaki\AppData\Local\Temp\RtmpYdIkNC\downloaded_packages
+</pre></div></div>
+</div>
+<p><strong>Step 14</strong>. Next, the installed libraries are loaded prior to use.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[53]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">fgsea</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">ggplot2</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">data.table</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">readr</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">clusterProfiler</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">dplyr</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+R[write to console]: data.table 1.17.0 using 4 threads (see ?getDTthreads).
+R[write to console]: Latest news: r-datatable.com
+
+R[write to console]:
+
+R[write to console]: clusterProfiler v4.14.6 Learn more at https://yulab-smu.top/contribution-knowledge-mining/
+
+Please cite:
+
+S Xu, E Hu, Y Cai, Z Xie, X Luo, L Zhan, W Tang, Q Wang, B Liu, R Wang,
+W Xie, T Wu, L Xie, G Yu. Using clusterProfiler to characterize
+multiomics data. Nature Protocols. 2024, 19(11):3292-3320
+
+R[write to console]:
+Attaching package: &#39;clusterProfiler&#39;
+
+
+R[write to console]: The following object is masked from &#39;package:stats&#39;:
+
+    filter
+
+
+R[write to console]:
+Attaching package: &#39;dplyr&#39;
+
+
+R[write to console]: The following objects are masked from &#39;package:data.table&#39;:
+
+    between, first, last
+
+
+R[write to console]: The following objects are masked from &#39;package:stats&#39;:
+
+    filter, lag
+
+
+R[write to console]: The following objects are masked from &#39;package:base&#39;:
+
+    intersect, setdiff, setequal, union
+
+
+</pre></div></div>
+</div>
+</section>
+<section id="Section-3.2-Execution-of-fGSEA">
+<h3>Section 3.2 Execution of fGSEA<a class="headerlink" href="#Section-3.2-Execution-of-fGSEA" title="Link to this heading"></a></h3>
+<p><strong>Step 15</strong>. fGSEA can be executed by first loading the data. At this step, the rankData variable name will be created which contains the GeneID and log2FC column of data.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[56]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+<span class="n">data</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">read_csv</span><span class="p">(</span><span class="s">&#39;topTable_Ag._.1.3_24 - H2O.control_.0.0_24-try.csv&#39;</span><span class="p">,</span><span class="n">show_col_types</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kc">FALSE</span><span class="p">)</span>
+<span class="n">rankData</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">log2FC</span>
+<span class="nf">names</span><span class="p">(</span><span class="n">rankData</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">data</span><span class="o">$</span><span class="n">GeneID</span>
+<span class="nf">head</span><span class="p">(</span><span class="n">rankData</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+    4490     4495    79974     4489     1638     4501
+3.935193 4.109887 2.532636 2.498127 2.349836 2.727981
+</pre></div></div>
+</div>
+<p><strong>Step 16</strong>. Next, the geneset of interest is read into the variable name: ‘pathway’.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[58]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+<span class="n">pathway</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">gmtPathways</span><span class="p">(</span><span class="s">&quot;./c2.cp.wikipathways.v2024.1.Hs.entrez.gmt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p><strong>Step 17</strong>. Lastly, fgGSEA is run and results are displayed. Based on the NES and ES scores, we can see strong similarity to the values observed for the preranked GSEA.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[60]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+<span class="n">fgseaRes</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">fgseaMultilevel</span><span class="p">(</span><span class="n">pathway</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">rankData</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">minSize</span><span class="o">=</span><span class="m">10</span><span class="p">,</span>
+<span class="w">                  </span><span class="n">maxSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">500</span><span class="p">)</span>
+
+<span class="n">fgseaRes</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">arrange</span><span class="p">(</span><span class="nf">desc</span><span class="p">(</span><span class="nf">abs</span><span class="p">(</span><span class="n">NES</span><span class="p">)))</span><span class="w"> </span><span class="o">%&gt;%</span>
+<span class="w">  </span><span class="nf">top_n</span><span class="p">(</span><span class="m">10</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="n">padj</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+                                                           pathway         pval
+                                                            &lt;char&gt;        &lt;num&gt;
+ 1:                                          WP_COPPER_HOMEOSTASIS 1.537901e-12
+ 2:                                            WP_ZINC_HOMEOSTASIS 5.055497e-13
+ 3: WP_GENES_RELATED_TO_PRIMARY_CILIUM_DEVELOPMENT_BASED_ON_CRISPR 1.766840e-11
+ 4:                                        WP_BARDETBIEDL_SYNDROME 2.574977e-09
+ 5:                                                WP_CILIOPATHIES 8.496336e-13
+ 6:                               WP_RETINOBLASTOMA_GENE_IN_CANCER 4.165935e-07
+ 7:                                            WP_JOUBERT_SYNDROME 3.479830e-06
+ 8:                                                  WP_CELL_CYCLE 4.005527e-07
+ 9:                                           WP_CILIARY_LANDSCAPE 1.492812e-08
+10:       WP_OVERVIEW_OF_PROINFLAMMATORY_AND_PROFIBROTIC_MEDIATORS 2.309469e-05
+            padj   log2err         ES       NES  size  leadingEdge
+           &lt;num&gt;     &lt;num&gt;      &lt;num&gt;     &lt;num&gt; &lt;int&gt;       &lt;list&gt;
+ 1: 3.649953e-10 0.9101197  0.7585618  2.699857    53 4495, 44....
+ 2: 3.024696e-10 0.9214260  0.8165622  2.665558    37 4495, 44....
+ 3: 3.144975e-09 0.8634154 -0.5468024 -2.521632   101 55764, 8....
+ 4: 3.666768e-07 0.7749390 -0.5407270 -2.449247    86 55764, 1....
+ 5: 3.024696e-10 0.9214260 -0.4705761 -2.370628   181 1063, 55....
+ 6: 3.707682e-05 0.6749629 -0.4887608 -2.226432    87 891, 241....
+ 7: 2.752932e-04 0.6272567 -0.4782106 -2.104594    76 4646, 48....
+ 8: 3.707682e-05 0.6749629 -0.4340094 -2.068247   119 891, 534....
+ 9: 1.771470e-06 0.7337620 -0.3807739 -1.945516   210 3934, 55....
+10: 1.644342e-03 0.5756103  0.4737143  1.925449   124 6375, 63....
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[61]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+
+<span class="n">topPathwaysUp</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fgseaRes</span><span class="p">[</span><span class="n">ES</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="m">0</span><span class="p">][</span><span class="nf">head</span><span class="p">(</span><span class="nf">order</span><span class="p">(</span><span class="n">pval</span><span class="p">),</span><span class="w"> </span><span class="n">n</span><span class="o">=</span><span class="m">10</span><span class="p">),</span><span class="w"> </span><span class="n">pathway</span><span class="p">]</span>
+<span class="n">topPathwaysDown</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="n">fgseaRes</span><span class="p">[</span><span class="n">ES</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="m">0</span><span class="p">][</span><span class="nf">head</span><span class="p">(</span><span class="nf">order</span><span class="p">(</span><span class="n">pval</span><span class="p">),</span><span class="w"> </span><span class="n">n</span><span class="o">=</span><span class="m">10</span><span class="p">),</span><span class="w"> </span><span class="n">pathway</span><span class="p">]</span>
+<span class="n">topPathways</span><span class="w"> </span><span class="o">&lt;-</span><span class="w"> </span><span class="nf">c</span><span class="p">(</span><span class="n">topPathwaysUp</span><span class="p">,</span><span class="w"> </span><span class="nf">rev</span><span class="p">(</span><span class="n">topPathwaysDown</span><span class="p">))</span>
+<span class="nf">plotGseaTable</span><span class="p">(</span><span class="n">pathway</span><span class="p">[</span><span class="n">topPathways</span><span class="p">],</span><span class="w"> </span><span class="n">rankData</span><span class="p">,</span><span class="w"> </span><span class="n">fgseaRes</span><span class="p">,</span><span class="w"> </span><span class="n">gseaParam</span><span class="o">=</span><span class="m">0.5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<img alt="_images/Agata%2CShakira-PersonalProject-GSEApy_vs_fGSEA_60_0.png" src="_images/Agata%2CShakira-PersonalProject-GSEApy_vs_fGSEA_60_0.png" />
+</div>
+</div>
+<p><strong>Conclusion:</strong> <em>Using both methods of GSEA in GSEApy revealed that the ranking method affects the pattern in NES scores. Besides the debate on the best ranking method, the internal ranking in the traditional GSEA yields a different pattern compared to the explicit usage of log2FC in preranked GSEA. To further confirm the findings, fGSEA was executed which yielded NES scores and ES scores similar to preranked GSEA. The usage of logFC explicitly in preranked GSEA appears more in line with
+findings from other GSEA packages and descriptions of GSEA tutorials.</em></p>
+</section>
+</section>
+<section id="Section-4.-Session-information-for-Python-and-R">
+<h2>Section 4. Session information for Python and R<a class="headerlink" href="#Section-4.-Session-information-for-Python-and-R" title="Link to this heading"></a></h2>
+<p>In this section, the session information for both Python and R used in this notebook will be displayed.</p>
+<section id="Section-4.1:-Python-session-information">
+<h3>Section 4.1: Python session information<a class="headerlink" href="#Section-4.1:-Python-session-information" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[66]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">load_ext</span> watermark
+<span class="o">%</span><span class="k">watermark</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Last updated: 2025-03-04T11:33:17.306769+01:00
+
+Python implementation: CPython
+Python version       : 3.12.3
+IPython version      : 8.25.0
+
+Compiler    : MSC v.1938 64 bit (AMD64)
+OS          : Windows
+Release     : 11
+Machine     : AMD64
+Processor   : Intel64 Family 6 Model 140 Stepping 1, GenuineIntel
+CPU cores   : 8
+Architecture: 64bit
+
+</pre></div></div>
+</div>
+</section>
+<section id="Section-4.2:-R-session-information">
+<h3>Section 4.2: R session information<a class="headerlink" href="#Section-4.2:-R-session-information" title="Link to this heading"></a></h3>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[68]:
+</pre></div>
+</div>
+<div class="input_area highlight-r notranslate"><div class="highlight"><pre><span></span><span class="o">%%</span><span class="n">R</span>
+<span class="nf">sessionInfo</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+R version 4.4.1 (2024-06-14 ucrt)
+Platform: x86_64-w64-mingw32/x64
+Running under: Windows 11 x64 (build 26100)
+
+Matrix products: default
+
+
+locale:
+[1] LC_COLLATE=Dutch_Netherlands.1252  LC_CTYPE=Dutch_Netherlands.1252
+[3] LC_MONETARY=Dutch_Netherlands.1252 LC_NUMERIC=C
+[5] LC_TIME=Dutch_Netherlands.1252
+
+time zone: Europe/Amsterdam
+tzcode source: internal
+
+attached base packages:
+[1] tools     stats     graphics  grDevices utils     datasets  methods
+[8] base
+
+other attached packages:
+[1] dplyr_1.1.4            clusterProfiler_4.14.6 readr_2.1.5
+[4] data.table_1.17.0      ggplot2_3.5.1          fgsea_1.32.2
+[7] BiocManager_1.30.25
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_1.2.1        farver_2.1.2            blob_1.2.4
+ [4] R.utils_2.12.3          Biostrings_2.73.2       lazyeval_0.2.2
+ [7] fastmap_1.2.0           digest_0.6.37           lifecycle_1.0.4
+[10] KEGGREST_1.46.0         tidytree_0.4.6          RSQLite_2.3.9
+[13] magrittr_2.0.3          compiler_4.4.1          rlang_1.1.4
+[16] igraph_2.1.3            ggtangle_0.0.6          labeling_0.4.3
+[19] bit_4.5.0.1             gson_0.1.0              plyr_1.8.9
+[22] RColorBrewer_1.1-3      aplot_0.2.4             BiocParallel_1.40.0
+[25] purrr_1.0.4             withr_3.0.2             BiocGenerics_0.52.0
+[28] R.oo_1.27.0             grid_4.4.1              stats4_4.4.1
+[31] GOSemSim_2.32.0         enrichplot_1.26.6       colorspace_2.1-1
+[34] GO.db_3.20.0            scales_1.3.0            cli_3.6.3
+[37] crayon_1.5.3            treeio_1.30.0           generics_0.1.3
+[40] ggtree_3.14.0           httr_1.4.7              reshape2_1.4.4
+[43] tzdb_0.4.0              ape_5.8-1               DBI_1.2.3
+[46] qvalue_2.38.0           cachem_1.1.0            DOSE_4.0.0
+[49] stringr_1.5.1           zlibbioc_1.51.2         splines_4.4.1
+[52] parallel_4.4.1          ggplotify_0.1.2         AnnotationDbi_1.68.0
+[55] XVector_0.45.0          vctrs_0.6.5             yulab.utils_0.2.0
+[58] Matrix_1.7-1            jsonlite_1.8.9          gridGraphics_0.5-1
+[61] IRanges_2.39.2          hms_1.1.3               patchwork_1.3.0
+[64] S4Vectors_0.43.2        ggrepel_0.9.6           bit64_4.6.0-1
+[67] tidyr_1.3.1             snow_0.4-4              glue_1.8.0
+[70] codetools_0.2-20        cowplot_1.1.3           stringi_1.8.4
+[73] gtable_0.3.6            GenomeInfoDb_1.42.3     UCSC.utils_1.2.0
+[76] munsell_0.5.1           tibble_3.2.1            pillar_1.10.1
+[79] GenomeInfoDbData_1.2.13 R6_2.6.1                vroom_1.6.5
+[82] lattice_0.22-6          Biobase_2.66.0          R.methodsS3_1.8.2
+[85] png_0.1-8               memoise_2.0.1           ggfun_0.1.8
+[88] Rcpp_1.0.14             fastmatch_1.1-6         nlme_3.1-166
+[91] fs_1.6.5                pkgconfig_2.0.3
+</pre></div></div>
+</div>
+<p><strong>References:</strong></p>
+<ol class="arabic simple">
+<li><p>Zhuoqing Fang, Xinyuan Liu, Gary Peltz, GSEApy: a comprehensive package for performing gene set enrichment analysis in Python, Bioinformatics, Volume 39, Issue January 2023, btac757, <a class="reference external" href="https://doi.org/10.1093/bioinformatics/btac757">https://doi.org/10.1093/bioinformatics/btac757</a></p></li>
+<li><p>Korotkevich G, Sukhov V, Sergushichev A (2019). “Fast gene set enrichment analysis.” bioRxiv. doi:10.1101/060012, http://biorxiv.org/content/early/2016/06/20/060012.</p></li>
+</ol>
+</section>
+</section>
+</section>
+
+
+
+
+</div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Gene Set Enrichment Analyses comparison documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Shakira Agata.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
