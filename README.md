@@ -12,9 +12,9 @@ Dual Python and R notebook that compares ouput for two methods of Gene Set Enric
 ```
 pip install rpy2
 ```
-3. Download the Jupyter Notebook from the gh-pages branch (.ipynb)
+3. Download the Jupyter Notebook (.ipynb) and example input files:'GSEApy-fGSEA-exampleinputfiles' from the gh-pages branch.
 4. Open the Jupyternotebook in Jupyterlab or Jupyternotebook.
 5. Run the cells of the notebook document step-by-step (one cell a time) by pressing shift + enter or run the whole notebook in a single step by clicking on the menu Cell -> Run All.
-6. Adapt the notebook with your own dataset or parameters of interest.
+6. Adapt the notebook with your own dataset and/or parameters of interest to compare your GSEA findings.
 
 
